@@ -2,39 +2,40 @@
 <html lang="en">
 <head>
     <title>Auto Suggest</title>
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
 
-    <div>
+    <span class="gear">&#9881;</span>
 
-        <span class="gear">&#9881;</span>
+    <span class="pill">
+    <span class="online-dot">&#8226;</span>
+    online |
+    &#128339; - ms
+    </span>
 
-        <span class="pill">
-            &#8226; online |
-            &#128339; - ms
-        </span>
+    <div class="main-content">
 
-        <h1>BeingInfinity</h1>
+        <h1><span class="logo">Being</span>Infinity</h1>
 
-        <p>
+        <p class="tagline">
             One million phrases.
-            Four algorithms.
+            Four Algorithms.
             Prefix Based Auto Suggest.
         </p>
 
-        <div>
-            <span>&#128269;</span>
+        <div class="search-container">
+            <span class="lens">&#128270;</span>
+
             <input
+                class="search-box"
                 type="text"
                 placeholder="Start typing to search phrases"
             >
+            <div id="search-suggestions">
+                
+            </div>
         </div>
-
-        <p>
-            Copyright &copy; Being Infinity Pvt Ltd.
-        </p>
-
     </div>
-
 </body>
 </html>
