@@ -1,45 +1,93 @@
+const API_URL = "https://autosuggest-backend.onrender.com/api/autosuggest";
+
 const searchBox = document.getElementById("searchBox");
+
 const suggestions = document.getElementById("suggestions");
 
-searchBox.addEventListener("input", async () => {
+searchBox.addEventListener("input", function () {
 
     const query = searchBox.value.trim();
 
-    if (!query) {
+    if(query.length === 0){
+
         suggestions.innerHTML = "";
+
+        suggestions.style.display = "none";
+
         return;
     }
 
-    try {
+    fetchSuggestions(query);
 
-        const response = await fetch(
-            `https://autosuggest-backend.onrender.com/api/autosuggest?q=${query}&weighted=true&algorithm=trie&limit=8`
-        );
+});
 
-        const data = await response.json();
+function fetchSuggestions(query){
 
-        suggestions.innerHTML = "";
+    const fullAPI =
+        API_URL +
+        "?q=" + encodeURIComponent(query) +
+        "&weighted=true" +
+        "&algorithm=trie" +
+        "&limit=8";
 
-        data.results.forEach(item => {
+    fetch(fullAPI)
 
-            const div = document.createElement("div");
+    .then(function(response){
 
-            div.className = "suggestion-item";
+        return response.json();
 
-            div.innerHTML = `
-                <span>${item.text}</span>
-                <span class="weight">${item.weight}</span>
-            `;
+    })
 
-            div.addEventListener("click", () => {
-                searchBox.value = item.text;
-                suggestions.innerHTML = "";
-            });
+    .then(function(data){
 
-            suggestions.appendChild(div);
+        showSuggestions(data);
+
+    })
+
+    .catch(function(error){
+
+        console.log(error);
+
+    });
+
+}
+
+function showSuggestions(data){
+
+    suggestions.innerHTML = "";
+
+    if(data.count === 0){
+
+        suggestions.innerHTML =
+        "<div class='suggestion-item'>No Matching Results Found</div>";
+
+        suggestions.style.display = "block";
+
+        return;
+    }
+
+    data.results.forEach(function(item){
+
+        const div = document.createElement("div");
+
+        div.className = "suggestion-item";
+
+        div.innerHTML =
+        "<span>" + item.text + "</span>" +
+        "<span class='weight'>" + item.weight + "</span>";
+
+        div.addEventListener("click",function(){
+
+            searchBox.value = item.text;
+
+            suggestions.style.display = "none";
+
         });
 
-    } catch (error) {
-        console.error(error);
-    }
-});
+        suggestions.appendChild(div);
+
+    });
+
+    suggestions.style.display = "block";
+
+}
